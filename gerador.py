@@ -4,12 +4,12 @@ from PIL import Image, ImageDraw, ImageFont
 from datetime import datetime
 
 
-workbookAlunos = openpyxl.load_workbook(filename='C:/Users/eduar/OneDrive/Arquivos/Projetos/geradorCertificados/Planilhas/planilhaAlunos.xlsx',read_only=True)
+workbookAlunos = openpyxl.load_workbook(filename='./Planilhas/planilhaAlunos.xlsx')
 sheetAlunos = workbookAlunos['Alunos']
 
-fontNormal = ImageFont.truetype('C:/Users/eduar/OneDrive/Arquivos/Projetos/geradorCertificados/Fontes/CONSOLA.TTF',size=20)
-fontData = ImageFont.truetype('C:/Users/eduar/OneDrive/Arquivos/Projetos/geradorCertificados/Fontes/CONSOLA.TTF',size=18)
-fontBold = ImageFont.truetype('C:/Users/eduar/OneDrive/Arquivos/Projetos/geradorCertificados/Fontes/CONSOLAB.TTF',size=28)
+fontNormal = ImageFont.truetype('./Fontes/consola.ttf',size=20)
+fontData = ImageFont.truetype('./Fontes/consola.ttf',size=18)
+fontBold = ImageFont.truetype('./Fontes/consolab.ttf',size=28)
 
 for indice, linha in enumerate(sheetAlunos.iter_rows(min_row=2)):
   aluno = linha[0].value
@@ -20,7 +20,11 @@ for indice, linha in enumerate(sheetAlunos.iter_rows(min_row=2)):
   dataFim = linha[5].value
   cargaHoraria = linha[6].value
   
-  image = Image.open('C:/Users/eduar/OneDrive/Arquivos/Projetos/geradorCertificados/Certificados/certificado-exemplo.jpg')
+  if aluno is None:
+    print('Todos os certificados foram gerados com sucesso!')
+    break
+  
+  image = Image.open('./Certificados/certificado-exemplo.jpg')
   certificado = ImageDraw.Draw(image)
   certificado.text((310,340),aluno, fill='black',font=fontBold)
   certificado.text((190,415),cpf, fill='black',font=fontNormal)
@@ -29,8 +33,8 @@ for indice, linha in enumerate(sheetAlunos.iter_rows(min_row=2)):
   certificado.text((460,450),datetime.strftime(dataFim,'%d/%m/%Y'), fill='black',font=fontData)
   certificado.text((860,450),str(cargaHoraria), fill='black',font=fontNormal)
   certificado.text((800,620),diretor, fill='black',font=fontNormal)
-  certificado.text((730,685),'E.E.B. Santos Dumont', fill='black',font=fontNormal)
-  image.save(f'C:/Users/eduar/OneDrive/Arquivos/Projetos/geradorCertificados/Certificados/{indice} - {aluno}.jpg')
+  certificado.text((730,685),'E.E.B. José Silvino', fill='black',font=fontNormal)
+  image.save(f'./Certificados/{indice} - {aluno}.jpg')
   
 # class  Singleton(object):
 #   def __new__( cls ):
